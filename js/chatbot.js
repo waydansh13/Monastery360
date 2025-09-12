@@ -477,8 +477,18 @@ class MonasteryChatbot {
 
 // Global functions for HTML onclick handlers
 function toggleChatbot() {
+    // Ensure chatbot exists; lazy-init if needed so the toggle button always works
+    if (!window.chatbot && typeof MonasteryChatbot === 'function') {
+        try {
+            window.chatbot = new MonasteryChatbot();
+        } catch (e) {
+            console.error('Failed to initialize chatbot on toggle:', e);
+        }
+    }
     if (window.chatbot) {
         window.chatbot.toggleChatbot();
+    } else {
+        console.error('Chatbot instance not available. Ensure js/chatbot.js is loaded after js/data.js.');
     }
 }
 
@@ -618,3 +628,10 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
     document.head.appendChild(style);
 });
+
+// Explicitly expose the class globally for safety in some environments
+try {
+    if (typeof window !== 'undefined') {
+        window.MonasteryChatbot = MonasteryChatbot;
+    }
+} catch (_) {}
