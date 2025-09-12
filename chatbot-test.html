@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Test - Monastery360</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .test-section h3 {
+            color: #8B4513;
+            margin-top: 0;
+        }
+        button {
+            background: #8B4513;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #A0522D;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .status.success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .status.error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .status.info {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+        #testResults {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Monastery360 Chatbot Test</h1>
+        <p>This page tests the chatbot functionality independently.</p>
+        
+        <div class="test-section">
+            <h3>1. Load Required Scripts</h3>
+            <button onclick="loadScripts()">Load Scripts</button>
+            <div id="scriptStatus"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>2. Initialize Chatbot</h3>
+            <button onclick="initializeChatbot()">Initialize Chatbot</button>
+            <div id="initStatus"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>3. Test Chatbot Functions</h3>
+            <button onclick="testToggle()">Test Toggle</button>
+            <button onclick="testSendMessage()">Test Send Message</button>
+            <button onclick="testLanguageChange()">Test Language Change</button>
+            <div id="functionStatus"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>4. Test Chatbot Responses</h3>
+            <button onclick="testMonasteryQuery()">Test Monastery Query</button>
+            <button onclick="testSectQuery()">Test Sect Query</button>
+            <button onclick="testLocationQuery()">Test Location Query</button>
+            <div id="responseStatus"></div>
+        </div>
+        
+        <div id="testResults"></div>
+    </div>
+
+    <!-- Load the required scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/chatbot.js"></script>
+
+    <script>
+        function addStatus(containerId, message, type = 'info') {
+            const container = document.getElementById(containerId);
+            const status = document.createElement('div');
+            status.className = `status ${type}`;
+            status.textContent = message;
+            container.appendChild(status);
+        }
+        
+        function clearStatus(containerId) {
+            document.getElementById(containerId).innerHTML = '';
+        }
+        
+        function loadScripts() {
+            clearStatus('scriptStatus');
+            
+            // Check if data is loaded
+            if (window.monasteriesData && window.monasteriesData.length > 0) {
+                addStatus('scriptStatus', `✅ Monasteries data loaded: ${window.monasteriesData.length} monasteries`, 'success');
+            } else {
+                addStatus('scriptStatus', '❌ Monasteries data not loaded', 'error');
+            }
+            
+            // Check if chatbot class is available
+            if (window.MonasteryChatbot) {
+                addStatus('scriptStatus', '✅ MonasteryChatbot class available', 'success');
+            } else {
+                addStatus('scriptStatus', '❌ MonasteryChatbot class not available', 'error');
+            }
+        }
+        
+        function initializeChatbot() {
+            clearStatus('initStatus');
+            
+            try {
+                if (window.monasteriesData && window.monasteriesData.length > 0) {
+                    window.chatbot = new MonasteryChatbot();
+                    addStatus('initStatus', '✅ Chatbot initialized successfully', 'success');
+                    addStatus('initStatus', `Monasteries available: ${window.chatbot.monasteries.length}`, 'info');
+                } else {
+                    addStatus('initStatus', '❌ Cannot initialize chatbot - no monasteries data', 'error');
+                }
+            } catch (error) {
+                addStatus('initStatus', `❌ Error initializing chatbot: ${error.message}`, 'error');
+            }
+        }
+        
+        function testToggle() {
+            clearStatus('functionStatus');
+            
+            if (window.chatbot) {
+                try {
+                    window.chatbot.toggleChatbot();
+                    addStatus('functionStatus', '✅ Toggle function works', 'success');
+                } catch (error) {
+                    addStatus('functionStatus', `❌ Toggle error: ${error.message}`, 'error');
+                }
+            } else {
+                addStatus('functionStatus', '❌ Chatbot not initialized', 'error');
+            }
+        }
+        
+        function testSendMessage() {
+            clearStatus('functionStatus');
+            
+            if (window.chatbot) {
+                try {
+                    // Simulate sending a message
+                    window.chatbot.addUserMessage('Hello, chatbot!');
+                    addStatus('functionStatus', '✅ Send message function works', 'success');
+                } catch (error) {
+                    addStatus('functionStatus', `❌ Send message error: ${error.message}`, 'error');
+                }
+            } else {
+                addStatus('functionStatus', '❌ Chatbot not initialized', 'error');
+            }
+        }
+        
+        function testLanguageChange() {
+            clearStatus('functionStatus');
+            
+            if (window.chatbot) {
+                try {
+                    window.chatbot.changeLanguage('hindi');
+                    addStatus('functionStatus', '✅ Language change function works', 'success');
+                } catch (error) {
+                    addStatus('functionStatus', `❌ Language change error: ${error.message}`, 'error');
+                }
+            } else {
+                addStatus('functionStatus', '❌ Chatbot not initialized', 'error');
+            }
+        }
+        
+        function testMonasteryQuery() {
+            clearStatus('responseStatus');
+            
+            if (window.chatbot) {
+                try {
+                    const response = window.chatbot.findMonasteryByName('rumtek');
+                    if (response) {
+                        addStatus('responseStatus', `✅ Found monastery: ${response.name}`, 'success');
+                    } else {
+                        addStatus('responseStatus', '❌ No monastery found for "rumtek"', 'error');
+                    }
+                } catch (error) {
+                    addStatus('responseStatus', `❌ Monastery query error: ${error.message}`, 'error');
+                }
+            } else {
+                addStatus('responseStatus', '❌ Chatbot not initialized', 'error');
+            }
+        }
+        
+        function testSectQuery() {
+            clearStatus('responseStatus');
+            
+            if (window.chatbot) {
+                try {
+                    const response = window.chatbot.findMonasteriesBySect('nyingma');
+                    if (response.length > 0) {
+                        addStatus('responseStatus', `✅ Found ${response.length} Nyingma monasteries`, 'success');
+                    } else {
+                        addStatus('responseStatus', '❌ No Nyingma monasteries found', 'error');
+                    }
+                } catch (error) {
+                    addStatus('responseStatus', `❌ Sect query error: ${error.message}`, 'error');
+                }
+            } else {
+                addStatus('responseStatus', '❌ Chatbot not initialized', 'error');
+            }
+        }
+        
+        function testLocationQuery() {
+            clearStatus('responseStatus');
+            
+            if (window.chatbot) {
+                try {
+                    const response = window.chatbot.findMonasteriesByLocation('gangtok');
+                    if (response.length > 0) {
+                        addStatus('responseStatus', `✅ Found ${response.length} monasteries in Gangtok`, 'success');
+                    } else {
+                        addStatus('responseStatus', '❌ No monasteries found in Gangtok', 'error');
+                    }
+                } catch (error) {
+                    addStatus('responseStatus', `❌ Location query error: ${error.message}`, 'error');
+                }
+            } else {
+                addStatus('responseStatus', '❌ Chatbot not initialized', 'error');
+            }
+        }
+        
+        // Auto-run initial tests
+        window.onload = () => {
+            setTimeout(() => {
+                loadScripts();
+            }, 1000);
+        };
+    </script>
+</body>
+</html>

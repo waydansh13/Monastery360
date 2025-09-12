@@ -10,17 +10,26 @@ class MonasteryChatbot {
     }
     
     init() {
+        console.log('Initializing MonasteryChatbot...');
+        console.log('Monasteries data available:', this.monasteries.length);
         this.setupEventListeners();
         this.loadInitialGreeting();
+        console.log('MonasteryChatbot initialized successfully');
     }
     
     setupEventListeners() {
+        console.log('Setting up chatbot event listeners...');
+        
         // Chatbot toggle
         const chatbotToggle = document.getElementById('chatbotToggle');
         if (chatbotToggle) {
+            console.log('Chatbot toggle button found');
             chatbotToggle.addEventListener('click', () => {
+                console.log('Chatbot toggle clicked');
                 this.toggleChatbot();
             });
+        } else {
+            console.error('Chatbot toggle button not found');
         }
         
         // Chat input
@@ -408,6 +417,8 @@ class MonasteryChatbot {
         const monastery = this.monasteries.find(m => m.id == monasteryId);
         if (monastery && window.app) {
             window.app.showMonasteryDetail(monastery);
+            // Close chatbot after showing details
+            this.toggleChatbot();
         }
     }
     
@@ -455,6 +466,13 @@ class MonasteryChatbot {
         }
         this.loadInitialGreeting();
     }
+    
+    // Method to integrate with main app language changes
+    syncWithAppLanguage() {
+        if (window.app && window.app.currentLanguage) {
+            this.currentLanguage = window.app.currentLanguage;
+        }
+    }
 }
 
 // Global functions for HTML onclick handlers
@@ -478,7 +496,22 @@ function handleChatKeypress(event) {
 
 // Initialize chatbot when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    window.chatbot = new MonasteryChatbot();
+    // Wait for monasteries data to be loaded
+    setTimeout(() => {
+        if (window.monasteriesData && window.monasteriesData.length > 0) {
+            window.chatbot = new MonasteryChatbot();
+        } else {
+            console.log('Waiting for monasteries data...');
+            // Retry after a longer delay
+            setTimeout(() => {
+                if (window.monasteriesData && window.monasteriesData.length > 0) {
+                    window.chatbot = new MonasteryChatbot();
+                } else {
+                    console.error('Monasteries data not available for chatbot');
+                }
+            }, 2000);
+        }
+    }, 500);
 });
 
 // Add CSS for chatbot enhancements

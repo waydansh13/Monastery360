@@ -161,6 +161,11 @@ class MonasteryApp {
         this.currentLanguage = language;
         // Update UI text based on language
         this.updateUIText(language);
+        
+        // Sync with chatbot if it exists
+        if (window.chatbot && window.chatbot.syncWithAppLanguage) {
+            window.chatbot.syncWithAppLanguage();
+        }
     }
     
     updateUIText(language) {
@@ -539,6 +544,13 @@ function toggleMute() {
 // Initialize app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     window.app = new MonasteryApp();
+    
+    // Initialize chatbot after app is ready
+    setTimeout(() => {
+        if (window.MonasteryChatbot) {
+            window.chatbot = new MonasteryChatbot();
+        }
+    }, 1000);
 });
 
 // Handle page visibility change to pause/resume audio
