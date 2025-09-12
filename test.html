@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monastery360 Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-item {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .test-item.pass {
+            background: #d4edda;
+            border-color: #c3e6cb;
+        }
+        .test-item.fail {
+            background: #f8d7da;
+            border-color: #f5c6cb;
+        }
+        .test-item.pending {
+            background: #fff3cd;
+            border-color: #ffeaa7;
+        }
+        button {
+            background: #8B4513;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #A0522D;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Monastery360 - Application Test</h1>
+        <p>This page tests the core functionality of Monastery360.</p>
+        
+        <button onclick="runTests()">Run All Tests</button>
+        <button onclick="clearTests()">Clear Results</button>
+        
+        <div id="testResults">
+            <!-- Test results will appear here -->
+        </div>
+    </div>
+
+    <script>
+        const testResults = document.getElementById('testResults');
+        
+        function addTestResult(name, status, message) {
+            const testItem = document.createElement('div');
+            testItem.className = `test-item ${status}`;
+            testItem.innerHTML = `
+                <strong>${name}</strong>: ${status.toUpperCase()}
+                <br><small>${message}</small>
+            `;
+            testResults.appendChild(testItem);
+        }
+        
+        function clearTests() {
+            testResults.innerHTML = '';
+        }
+        
+        async function runTests() {
+            clearTests();
+            
+            // Test 1: Check if main files exist
+            addTestResult('File Structure', 'pending', 'Checking main files...');
+            
+            try {
+                const response = await fetch('/index.html');
+                if (response.ok) {
+                    addTestResult('Main HTML File', 'pass', 'index.html is accessible');
+                } else {
+                    addTestResult('Main HTML File', 'fail', 'index.html not accessible');
+                }
+            } catch (error) {
+                addTestResult('Main HTML File', 'fail', 'Error loading index.html: ' + error.message);
+            }
+            
+            // Test 2: Check CSS files
+            try {
+                const response = await fetch('/styles/main.css');
+                if (response.ok) {
+                    addTestResult('Main CSS File', 'pass', 'styles/main.css is accessible');
+                } else {
+                    addTestResult('Main CSS File', 'fail', 'styles/main.css not accessible');
+                }
+            } catch (error) {
+                addTestResult('Main CSS File', 'fail', 'Error loading main.css: ' + error.message);
+            }
+            
+            // Test 3: Check JavaScript files
+            try {
+                const response = await fetch('/js/data.js');
+                if (response.ok) {
+                    addTestResult('Data JavaScript', 'pass', 'js/data.js is accessible');
+                } else {
+                    addTestResult('Data JavaScript', 'fail', 'js/data.js not accessible');
+                }
+            } catch (error) {
+                addTestResult('Data JavaScript', 'fail', 'Error loading data.js: ' + error.message);
+            }
+            
+            // Test 4: Check PWA manifest
+            try {
+                const response = await fetch('/manifest.json');
+                if (response.ok) {
+                    addTestResult('PWA Manifest', 'pass', 'manifest.json is accessible');
+                } else {
+                    addTestResult('PWA Manifest', 'fail', 'manifest.json not accessible');
+                }
+            } catch (error) {
+                addTestResult('PWA Manifest', 'fail', 'Error loading manifest.json: ' + error.message);
+            }
+            
+            // Test 5: Check service worker
+            try {
+                const response = await fetch('/sw.js');
+                if (response.ok) {
+                    addTestResult('Service Worker', 'pass', 'sw.js is accessible');
+                } else {
+                    addTestResult('Service Worker', 'fail', 'sw.js not accessible');
+                }
+            } catch (error) {
+                addTestResult('Service Worker', 'fail', 'Error loading sw.js: ' + error.message);
+            }
+            
+            // Test 6: Check icons
+            try {
+                const response = await fetch('/icons/icon-192x192.png');
+                if (response.ok) {
+                    addTestResult('PWA Icons', 'pass', 'Icon files are accessible');
+                } else {
+                    addTestResult('PWA Icons', 'fail', 'Icon files not accessible');
+                }
+            } catch (error) {
+                addTestResult('PWA Icons', 'fail', 'Error loading icons: ' + error.message);
+            }
+            
+            // Test 7: Check browser features
+            if ('serviceWorker' in navigator) {
+                addTestResult('Service Worker Support', 'pass', 'Browser supports Service Workers');
+            } else {
+                addTestResult('Service Worker Support', 'fail', 'Browser does not support Service Workers');
+            }
+            
+            if ('speechSynthesis' in window) {
+                addTestResult('Speech Synthesis', 'pass', 'Browser supports Text-to-Speech');
+            } else {
+                addTestResult('Speech Synthesis', 'fail', 'Browser does not support Text-to-Speech');
+            }
+            
+            if ('geolocation' in navigator) {
+                addTestResult('Geolocation', 'pass', 'Browser supports Geolocation');
+            } else {
+                addTestResult('Geolocation', 'fail', 'Browser does not support Geolocation');
+            }
+            
+            // Test 8: Check localStorage
+            try {
+                localStorage.setItem('test', 'value');
+                localStorage.removeItem('test');
+                addTestResult('Local Storage', 'pass', 'Local Storage is available');
+            } catch (error) {
+                addTestResult('Local Storage', 'fail', 'Local Storage not available: ' + error.message);
+            }
+            
+            // Test 9: Check HTTPS
+            if (location.protocol === 'https:' || location.hostname === 'localhost') {
+                addTestResult('HTTPS/Localhost', 'pass', 'Running on HTTPS or localhost');
+            } else {
+                addTestResult('HTTPS/Localhost', 'fail', 'Not running on HTTPS (required for PWA)');
+            }
+            
+            // Test 10: Check viewport
+            const viewport = document.querySelector('meta[name="viewport"]');
+            if (viewport) {
+                addTestResult('Viewport Meta Tag', 'pass', 'Viewport meta tag is present');
+            } else {
+                addTestResult('Viewport Meta Tag', 'fail', 'Viewport meta tag is missing');
+            }
+            
+            addTestResult('Test Suite Complete', 'pass', 'All tests have been executed');
+        }
+        
+        // Run tests on page load
+        window.onload = () => {
+            setTimeout(runTests, 1000);
+        };
+    </script>
+</body>
+</html>
