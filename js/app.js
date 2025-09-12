@@ -418,6 +418,27 @@ class MonasteryApp {
         }
     }
     
+    open3DView() {
+        if (!this.currentMonastery) return;
+        const { latitude, longitude } = this.currentMonastery.coordinates || {};
+        const container = document.getElementById('streetViewContainer');
+        if (!container) return;
+        // Ensure the container is visible
+        container.style.display = 'block';
+        // Load Google Maps API and open Street View at the monastery coordinates
+        if (window.VirtualTours && typeof window.VirtualTours.openStreetView === 'function') {
+            window.VirtualTours.openStreetView(latitude, longitude, 0, 0, 1);
+        } else if (window.VirtualTours && typeof window.VirtualTours.loadGoogleMapsIfNeeded === 'function') {
+            window.VirtualTours.loadGoogleMapsIfNeeded();
+            // Defer opening until API load completes
+            setTimeout(() => {
+                if (window.VirtualTours.openStreetView) {
+                    window.VirtualTours.openStreetView(latitude, longitude, 0, 0, 1);
+                }
+            }, 1500);
+        }
+    }
+    
     playAudioGuide() {
         if (this.currentMonastery && this.currentMonastery.audioGuide) {
             const audioText = this.currentMonastery.audioGuide[this.currentLanguage] || 
@@ -531,6 +552,10 @@ function showOnMap() {
 
 function playAudioGuide() {
     app.playAudioGuide();
+}
+
+function open3DView() {
+    app.open3DView();
 }
 
 function toggleAudio() {

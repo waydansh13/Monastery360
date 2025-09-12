@@ -10,6 +10,7 @@ A comprehensive Progressive Web App (PWA) showcasing over 100 monasteries of Sik
 - **360° Image Placeholders**: Ready for 360° panoramic images
 - **Multilingual Support**: English, Hindi, and Nepali audio guides
 - **Smart Chatbot**: AI-powered assistant for monastery queries
+- **3D Virtual Tours**: Google Street View integration where available
 - **Responsive Design**: Mobile-first, PWA-ready interface
 
 ### Technical Features
@@ -228,6 +229,33 @@ Deploy to any static hosting service:
 - **HTTPS**: Required for PWA features
 - **MIME Types**: Ensure proper MIME types for all files
 - **Caching**: Configure appropriate cache headers
+
+## 🧭 Google 3D Virtual Tours
+
+Monastery360 supports 3D virtual tours using Google Street View where panoramas are available near the monastery coordinates.
+
+### Setup API Key
+
+1. Create a Google Cloud project and enable the Maps JavaScript API and Street View Static API.
+2. Create an API key and restrict it to your domains.
+3. Provide the key to the app via either method:
+
+   - Add a small inline script in `index.html` before `js/virtual.js`:
+     ```html
+     <script>window.MONASTERY360_GOOGLE_MAPS_API_KEY = 'YOUR_REAL_API_KEY';</script>
+     ```
+   - Or set it at runtime via any script that runs before `virtual.js` loads.
+
+### Usage
+
+- Open any monastery detail and click the "🧭 3D View" button.
+- If a Street View panorama is available within ~250m, it will appear in the embedded viewer.
+- If not available, the UI hides gracefully with a notification.
+
+### Notes
+
+- Street View coverage in remote Himalayan regions can be limited.
+- Use your own API key in production to avoid quota issues.
 
 ## 🤝 Contributing
 
