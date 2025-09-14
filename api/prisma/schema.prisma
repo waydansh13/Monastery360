@@ -1,0 +1,212 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  username  String   @unique
+  password  String
+  firstName String
+  lastName  String
+  role      UserRole @default(USER)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  contributions Contribution[]
+  reviews       Review[]
+
+  @@map("users")
+}
+
+model Monastery {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String
+  location    String
+  district    String
+  coordinates Json     // { lat: number, lng: number }
+  established String?  // Year or date
+  sect        String?  // Buddhist sect
+  significance String?
+  features    String[] // ["Virtual Tour", "3D Model", "AR Experience"]
+  
+  // Media
+  coverImage  String?
+  gallery     String[] // Array of image URLs
+  
+  // Status
+  isPublished Boolean  @default(false)
+  isFeatured  Boolean  @default(false)
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  virtualTours    VirtualTour[]
+  models3D        Model3D[]
+  artifacts       Artifact[]
+  rituals         Ritual[]
+  historicalRecords HistoricalRecord[]
+  reviews         Review[]
+
+  @@map("monasteries")
+}
+
+model VirtualTour {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  panoramaUrl String   // URL to 360° panorama image
+  hotspots    Json?    // Interactive hotspots data
+  duration    Int?     // Duration in minutes
+  isPublished Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  monastery   Monastery @relation(fields: [monasteryId], references: [id], onDelete: Cascade)
+  monasteryId String
+
+  @@map("virtual_tours")
+}
+
+model Model3D {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  modelUrl    String   // URL to 3D model file
+  thumbnail   String?  // Thumbnail image URL
+  annotations Json?    // 3D annotations data
+  isPublished Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  monastery   Monastery @relation(fields: [monasteryId], references: [id], onDelete: Cascade)
+  monasteryId String
+
+  @@map("models_3d")
+}
+
+model Artifact {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  category    String   // "Statue", "Thangka", "Manuscript", "Ritual Object", etc.
+  material    String?
+  dimensions  String?  // "height x width x depth"
+  origin      String?  // Origin/creator information
+  significance String?
+  images      String[] // Array of image URLs
+  isPublished Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  monastery   Monastery @relation(fields: [monasteryId], references: [id], onDelete: Cascade)
+  monasteryId String
+
+  @@map("artifacts")
+}
+
+model Ritual {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  type        String   // "Daily", "Festival", "Ceremony", "Prayer"
+  schedule    String?  // When it occurs
+  significance String?
+  videoUrl    String?  // Video documentation URL
+  images      String[] // Array of image URLs
+  isPublished Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  monastery   Monastery @relation(fields: [monasteryId], references: [id], onDelete: Cascade)
+  monasteryId String
+
+  @@map("rituals")
+}
+
+model HistoricalRecord {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  type        String   // "Manuscript", "Document", "Photograph", "Audio", "Video"
+  content     String?  // Text content for manuscripts
+  fileUrl     String?  // URL to digitized file
+  language    String?  // Language of the record
+  date        String?  // Historical date
+  significance String?
+  isPublished Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  monastery   Monastery @relation(fields: [monasteryId], references: [id], onDelete: Cascade)
+  monasteryId String
+
+  @@map("historical_records")
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  rating    Int      // 1-5 stars
+  comment   String?
+  isPublic  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  monastery Monastery @relation(fields: [monasteryId], references: [id], onDelete: Cascade)
+  monasteryId String
+
+  @@map("reviews")
+}
+
+model Contribution {
+  id          String   @id @default(cuid())
+  type        String   // "Artifact", "Ritual", "Historical Record", "Media"
+  title       String
+  description String
+  content     Json?    // Contribution-specific data
+  status      ContributionStatus @default(PENDING)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+
+  @@map("contributions")
+}
+
+enum UserRole {
+  USER
+  ADMIN
+  CURATOR
+  RESEARCHER
+}
+
+enum ContributionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  UNDER_REVIEW
+}

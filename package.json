@@ -1,0 +1,30 @@
+{
+  "name": "sikkim-monasteries-platform",
+  "version": "1.0.0",
+  "description": "Interactive digital platform for showcasing Sikkim's monasteries with virtual tours, 3D models, and AR experiences",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:web\" \"npm run dev:api\"",
+    "dev:web": "cd web && npm run dev",
+    "dev:api": "cd api && npm run dev",
+    "dev:mobile": "cd mobile && npm run start",
+    "build": "npm run build:web && npm run build:api",
+    "build:web": "cd web && npm run build",
+    "build:api": "cd api && npm run build",
+    "install:all": "npm install && cd web && npm install && cd ../api && npm install && cd ../mobile && npm install"
+  },
+  "keywords": [
+    "sikkim",
+    "monasteries",
+    "virtual-tours",
+    "3d-models",
+    "augmented-reality",
+    "cultural-heritage",
+    "nmma"
+  ],
+  "author": "Sikkim Digital Heritage Project",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
