@@ -1,0 +1,20 @@
+<svg width="72" height="72" viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <radialGradient id="bg" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" style="stop-color:#D2691E;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#8B4513;stop-opacity:1" />
+            </radialGradient>
+        </defs>
+        <rect width="72" height="72" fill="url(#bg)" rx="7.2"/>
+        <rect x="14.4" y="21.599999999999998" width="43.199999999999996" height="28.8" fill="#F5F5DC" rx="1.44"/>
+        <polygon points="10.799999999999999,21.599999999999998 36,10.799999999999999 61.199999999999996,21.599999999999998" fill="#CD853F"/>
+        <rect x="33.120000000000005" y="41.76" width="5.76" height="8.64" fill="#8B4513"/>
+        <rect x="21.599999999999998" y="27.36" width="4.32" height="4.32" fill="#8B4513"/>
+        <rect x="46.08" y="27.36" width="4.32" height="4.32" fill="#8B4513"/>
+        <line x1="21.599999999999998" y1="10.799999999999999" x2="21.599999999999998" y2="18" stroke="#FFFFFF" stroke-width="0.72"/>
+        <line x1="28.8" y1="10.799999999999999" x2="28.8" y2="18" stroke="#FFFFFF" stroke-width="0.72"/>
+        <line x1="36" y1="10.799999999999999" x2="36" y2="18" stroke="#FFFFFF" stroke-width="0.72"/>
+        <line x1="43.199999999999996" y1="10.799999999999999" x2="43.199999999999996" y2="18" stroke="#FFFFFF" stroke-width="0.72"/>
+        <line x1="50.4" y1="10.799999999999999" x2="50.4" y2="18" stroke="#FFFFFF" stroke-width="0.72"/>
+        <rect width="72" height="72" fill="none" stroke="#FFFFFF" stroke-width="1.44" rx="7.2"/>
+    </svg>

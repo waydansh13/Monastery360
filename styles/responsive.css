@@ -1,0 +1,373 @@
+/* Responsive Design */
+
+/* Large screens (1200px and up) */
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1400px;
+    }
+    
+    .hero-title {
+        font-size: 4rem;
+    }
+    
+    .monasteries-grid {
+        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    }
+}
+
+/* Medium screens (768px to 1199px) */
+@media (max-width: 1199px) {
+    .hero-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 2rem;
+    }
+    
+    .hero-title {
+        font-size: 3rem;
+    }
+    
+    .monasteries-grid {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
+    
+    .monastery-detail {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Small screens (576px to 767px) */
+@media (max-width: 767px) {
+    .nav-menu {
+        position: fixed;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        flex-direction: column;
+        padding: 2rem;
+        box-shadow: var(--shadow);
+        transform: translateY(-100%);
+        opacity: 0;
+        visibility: hidden;
+        transition: var(--transition);
+    }
+    
+    .nav-menu.active {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+    }
+    
+    .nav-toggle {
+        display: flex;
+    }
+    
+    .nav-toggle.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+    }
+    
+    .nav-toggle.active span:nth-child(2) {
+        opacity: 0;
+    }
+    
+    .nav-toggle.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -6px);
+    }
+    
+    .hero {
+        padding: 100px 0 60px;
+        text-align: center;
+    }
+    
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.1rem;
+    }
+    
+    .hero-actions {
+        justify-content: center;
+    }
+    
+    .search-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .search-box {
+        min-width: auto;
+    }
+    
+    .filter-container {
+        flex-direction: column;
+    }
+    
+    .monasteries-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .monastery-card {
+        margin: 0 10px;
+    }
+    
+    .map-container {
+        height: 400px;
+        margin: 0 10px;
+    }
+    
+    .chatbot {
+        width: calc(100vw - 40px);
+        height: 400px;
+        right: 20px;
+        left: 20px;
+    }
+    
+    .modal {
+        padding: 1rem;
+    }
+    
+    .modal-content {
+        max-height: 95vh;
+    }
+    
+    .modal-header {
+        padding: 1rem;
+    }
+    
+    .modal-body {
+        padding: 1rem;
+    }
+    
+    .image-gallery {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+}
+
+/* Extra small screens (up to 575px) */
+@media (max-width: 575px) {
+    .container {
+        padding: 0 15px;
+    }
+    
+    .nav-container {
+        padding: 0 15px;
+    }
+    
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+    
+    .btn {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+    
+    .hero-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .section-header h2 {
+        font-size: 2rem;
+    }
+    
+    .monastery-card {
+        margin: 0 5px;
+    }
+    
+    .monastery-content {
+        padding: 1rem;
+    }
+    
+    .monastery-name {
+        font-size: 1.1rem;
+    }
+    
+    .map-container {
+        height: 300px;
+        margin: 0 5px;
+    }
+    
+    .chatbot {
+        width: calc(100vw - 20px);
+        height: 350px;
+        right: 10px;
+        left: 10px;
+    }
+    
+    .chatbot-toggle {
+        width: 50px;
+        height: 50px;
+        bottom: 15px;
+        right: 15px;
+    }
+    
+    .audio-player {
+        padding: 0.8rem;
+    }
+    
+    .audio-controls {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    .audio-progress {
+        order: 3;
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+    
+    .image-gallery {
+        grid-template-columns: 1fr;
+    }
+    
+    .image-gallery img {
+        height: 120px;
+    }
+}
+
+/* Landscape orientation adjustments */
+@media (max-height: 500px) and (orientation: landscape) {
+    .hero {
+        padding: 80px 0 40px;
+        min-height: auto;
+    }
+    
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+    
+    .chatbot {
+        height: 300px;
+    }
+    
+    .modal-content {
+        max-height: 90vh;
+    }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .monastery-image img,
+    .main-image img {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+    }
+}
+
+/* Print styles */
+@media print {
+    .navbar,
+    .chatbot,
+    .chatbot-toggle,
+    .audio-player,
+    .modal {
+        display: none !important;
+    }
+    
+    .hero {
+        padding: 2rem 0;
+        background: white !important;
+    }
+    
+    .monastery-card {
+        break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid #ccc;
+    }
+    
+    .btn {
+        display: none;
+    }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .spinner {
+        animation: none;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --text-dark: #E0E0E0;
+        --text-light: #B0B0B0;
+        --bg-white: #1A1A1A;
+        --bg-light: #2A2A2A;
+        --border-color: #404040;
+    }
+    
+    .navbar {
+        background: rgba(26, 26, 26, 0.95);
+    }
+    
+    .monastery-card {
+        background: #2A2A2A;
+    }
+    
+    .chatbot {
+        background: #2A2A2A;
+    }
+    
+    .modal-content {
+        background: #2A2A2A;
+    }
+    
+    .search-box input,
+    .filter-container select,
+    .chatbot-input input {
+        background: #2A2A2A;
+        color: var(--text-dark);
+        border-color: var(--border-color);
+    }
+}
+
+/* Focus styles for accessibility */
+.btn:focus,
+.nav-link:focus,
+input:focus,
+select:focus,
+button:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Skip link for screen readers */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 6px;
+    background: var(--primary-color);
+    color: white;
+    padding: 8px;
+    text-decoration: none;
+    z-index: 10000;
+}
+
+.skip-link:focus {
+    top: 6px;
+}
