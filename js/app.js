@@ -440,33 +440,21 @@ class MonasteryApp {
     }
     
     playAudioGuide() {
+        if (window.audioGuide && this.currentMonastery) {
+            window.audioGuide.playMonasteryAudio(this.currentMonastery, this.currentLanguage);
+            return;
+        }
         if (this.currentMonastery && this.currentMonastery.audioGuide) {
-            const audioText = this.currentMonastery.audioGuide[this.currentLanguage] || 
-                            this.currentMonastery.audioGuide.english;
-            
-            // Use Web Speech API for text-to-speech
+            const audioText = this.currentMonastery.audioGuide[this.currentLanguage] || this.currentMonastery.audioGuide.english;
             if ('speechSynthesis' in window) {
-                // Stop any current speech
                 window.speechSynthesis.cancel();
-                
                 const utterance = new SpeechSynthesisUtterance(audioText);
                 utterance.rate = 0.8;
                 utterance.pitch = 1;
                 utterance.volume = 0.8;
-                
-                // Update audio player UI
                 this.updateAudioPlayer(this.currentMonastery.name, audioText);
-                
-                utterance.onstart = () => {
-                    this.isAudioPlaying = true;
-                    this.updateAudioPlayerControls();
-                };
-                
-                utterance.onend = () => {
-                    this.isAudioPlaying = false;
-                    this.updateAudioPlayerControls();
-                };
-                
+                utterance.onstart = () => { this.isAudioPlaying = true; this.updateAudioPlayerControls(); };
+                utterance.onend = () => { this.isAudioPlaying = false; this.updateAudioPlayerControls(); };
                 window.speechSynthesis.speak(utterance);
                 this.currentAudio = utterance;
             }
@@ -493,6 +481,7 @@ class MonasteryApp {
     }
     
     toggleAudio() {
+        if (window.audioGuide) { window.audioGuide.togglePlayPause(); return; }
         if (this.isAudioPlaying) {
             window.speechSynthesis.pause();
             this.isAudioPlaying = false;
@@ -508,16 +497,12 @@ class MonasteryApp {
     }
     
     toggleMute() {
-        // Toggle volume for speech synthesis
+        if (window.audioGuide) { window.audioGuide.toggleMute(); return; }
         const volumeBtn = document.getElementById('volumeBtn');
         if (volumeBtn) {
             const isMuted = volumeBtn.textContent === '🔇';
             volumeBtn.textContent = isMuted ? '🔊' : '🔇';
-            
-            // Adjust volume
-            if (this.currentAudio) {
-                this.currentAudio.volume = isMuted ? 0.8 : 0;
-            }
+            if (this.currentAudio) { this.currentAudio.volume = isMuted ? 0.8 : 0; }
         }
     }
 }
